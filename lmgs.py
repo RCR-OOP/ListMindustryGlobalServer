@@ -32,7 +32,7 @@ class _cfg:
 	class _timeout:
 		GetStatus = 1
 		GetStatusHandler = 5
-		SpeedUpdateTable = 1
+		SpeedUpdateTable = 5
 		UpTableGL = 30
 
 	class _works:
@@ -49,10 +49,12 @@ class _tmp:
 
 class _func:
 	def UpdateTableGL(csl):
-		with Live(_tmp.table, refresh_per_second = 4) as LiveTable:
+		_tmp.table_text = eval("csl.print(_tmp.table, justify = \"center\")")
+		with Live(_tmp.table_text, refresh_per_second = 4) as LiveTable:
 			while _cfg._works.UpTableGL:
 				csl.clear()
-				LiveTable.update(eval("csl.print(_tmp.table, justify = \"center\")"))
+				_tmp.table_text = eval("csl.print(_tmp.table, justify = \"center\")")
+				LiveTable.update(_tmp.table_text)
 				time.sleep(_cfg._timeout.SpeedUpdateTable)
 
 	def TimeoutErrorTableAddHandler(address_list, cycle_id):
