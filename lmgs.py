@@ -14,12 +14,13 @@ from rich.console import Console
 from rich.table import Table
 from rich.progress import Progress
 from rich.layout import Layout
+from rich.live import Live
 
 # Конфигурации
 class _proginfo:
 	name = "LMGS"
-	version = "0.3-beta"
-	versionint = 0.3
+	version = "0.3.1-beta"
+	versionint = 0.31
 	company = "RCR"
 	author = "Roman Slabicky"
 
@@ -31,8 +32,7 @@ class _cfg:
 	class _timeout:
 		GetStatus = 1
 		GetStatusHandler = 5
-
-		SpeedUpdateTable = 5
+		SpeedUpdateTable = 1
 		UpTableGL = 30
 
 	class _works:
@@ -49,10 +49,11 @@ class _tmp:
 
 class _func:
 	def UpdateTableGL(csl):
-		while _cfg._works.UpTableGL:
-			_func.clear()
-			csl.print(_tmp.table, justify = "center")
-			time.sleep(_cfg._timeout.SpeedUpdateTable)
+		with Live(_tmp.table, refresh_per_second = 4) as LiveTable:
+			while _cfg._works.UpTableGL:
+				csl.clear()
+				LiveTable.update(eval("csl.print(_tmp.table, justify = \"center\")"))
+				time.sleep(_cfg._timeout.SpeedUpdateTable)
 
 	def TimeoutErrorTableAddHandler(address_list, cycle_id):
 		if len(address_list) == 1:
