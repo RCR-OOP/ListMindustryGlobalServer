@@ -50,6 +50,7 @@ class _tmp:
 class _func:
 	def UpdateTableGL(csl):
 		_tmp.table_text = eval("csl.print(_tmp.table, justify = \"center\")")
+		csl.clear()
 		with Live(_tmp.table_text, refresh_per_second = 4) as LiveTable:
 			while _cfg._works.UpTableGL:
 				csl.clear()
