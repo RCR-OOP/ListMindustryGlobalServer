@@ -1,6 +1,6 @@
 import os
 import sys
-import wget
+import httpx
 import json
 import time
 from threading import Thread
@@ -26,7 +26,7 @@ class _proginfo:
 
 class _cfg:
 	class _net:
-		url_gl = "https://raw.githubusercontent.com/Anuken/Mindustry/master/servers_v6.json"
+		url_gl = "https://raw.githubusercontent.com/Anuken/Mindustry/master/servers_v7.json"
 		gldata = None
 
 	class _timeout:
@@ -90,16 +90,14 @@ _func.set_title(f"{_proginfo.name} v{_proginfo.version} ({_proginfo.versionint})
 with Progress() as LoadingCBIMS:
 	TaskLoadingCBIMS = LoadingCBIMS.add_task("[cyan]Loading...", total = 4)
 
-	filename_gl = wget.download(_cfg._net.url_gl)
+	data_gl = httpx.get(_cfg._net.url_gl)
 	LoadingCBIMS.update(TaskLoadingCBIMS, advance = 1)
 	console.clear()
 	LoadingCBIMS.update(TaskLoadingCBIMS, advance = 1)
 
-	with open(filename_gl) as glfile:
-		_cfg._net.gldata = json.load(glfile)
+	_cfg._net.gldata = data_gl.json()
 	LoadingCBIMS.update(TaskLoadingCBIMS, advance = 1)
 
-	os.remove(filename_gl)
 	LoadingCBIMS.update(TaskLoadingCBIMS, advance = 1)
 
 # Работа программы
